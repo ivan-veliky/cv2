@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ivan Velykyi - Marketing Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            z-index: 1000;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .spotlight {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            transition: transform 0.15s ease-out;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 80px;
+            margin-bottom: 100px;
+            align-items: start;
+            padding-top: 40px;
+        }
+
+        .profile-section {
+            position: sticky;
+            top: 40px;
+        }
+
+        .profile-photo-wrapper {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .profile-photo {
+            width: 280px;
+            height: 280px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+            color: #ffffff;
+            font-weight: 300;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-photo:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-accent {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            width: 100px;
+            height: 100px;
+            background: #ffffff;
+            border-radius: 10px;
+            z-index: -1;
+        }
+
+        .contact-info {
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #888;
+            font-size: 0.95em;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item:hover {
+            color: #ffffff;
+        }
+
+        .contact-item a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .hero-content {
+            padding-top: 20px;
+        }
+
+        h1 {
+            font-size: 5em;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .title-accent {
+            font-weight: 600;
+            display: block;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #888;
+            margin-bottom: 40px;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .summary-text {
+            font-size: 1.1em;
+            color: #aaa;
+            line-height: 1.8;
+            max-width: 600px;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            margin-bottom: 120px;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .section:nth-child(2) { animation-delay: 0.5s; }
+        .section:nth-child(3) { animation-delay: 0.6s; }
+        .section:nth-child(4) { animation-delay: 0.7s; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .section-number {
+            font-size: 1em;
+            color: #444;
+            font-weight: 300;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+        }
+
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .skill-card {
+            background: #000000;
+            padding: 40px 35px;
+            transition: background 0.3s ease;
+        }
+
+        .skill-card:hover {
+            background: #0a0a0a;
+        }
+
+        .skill-card h3 {
+            font-size: 1.2em;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .skill-card ul {
+            list-style: none;
+        }
+
+        .skill-card li {
+            color: #888;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .skill-card li:before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: #444;
+        }
+
+        .timeline {
+            position: relative;
+        }
+
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .experience-item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 70px;
+        }
+
+        .experience-item:before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 5px;
+            width: 9px;
+            height: 9px;
+            background: #ffffff;
+            border-radius: 50%;
+        }
+
+        .experience-header {
+            margin-bottom: 20px;
+        }
+
+        .job-title {
+            font-size: 1.8em;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .company {
+            font-size: 1.1em;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .duration {
+            font-size: 0.9em;
+            color: #555;
+            font-weight: 300;
+        }
+
+        .experience-item ul {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .experience-item li {
+            color: #aaa;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+            font-size: 0.95em;
+        }
+
+        .experience-item li:before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #444;
+        }
+
+        .education-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .education-card {
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        .education-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .education-card h3 {
+            font-size: 1.5em;
+            font-weight: 400;
+            margin-bottom: 15px;
+        }
+
+        .education-card .institution {
+            color: #888;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .education-card .year {
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        .languages {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .language-item {
+            flex: 1;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .language-item:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .language-item .lang-name {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .language-item .lang-level {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            color: #444;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 968px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .profile-section {
+                position: relative;
+                top: 0;
+                display: flex;
+                align-items: center;
+                gap: 40px;
+            }
+
+            .profile-photo {
+                width: 180px;
+                height: 180px;
+                font-size: 70px;
+            }
+
+            h1 {
+                font-size: 3.5em;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .education-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .languages {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .profile-section {
+                flex-direction: column;
+            }
+
+            .section {
+                margin-bottom: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain-overlay"></div>
+    <div class="spotlight" id="spotlight"></div>
+
+    <div class="container">
+        <div class="hero">
+            <div class="profile-section">
+                <div class="profile-photo-wrapper">
+                    <div class="profile-photo">
+                        <img src="me.jpg" alt="Ivan Velykyi" onerror="this.style.display='none'; this.parentElement.innerHTML='IV';">
+                    </div>
+                    <div class="profile-accent"></div>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span>📧</span>
+                        <a href="mailto:ivn.veliky@gmail.com">ivn.veliky@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <span>💬</span>
+                        <a href="https://t.me/eevan_it">@eevan_it</a>
+                    </div>
+                    <div class="contact-item">
+                        <span>📍</span>
+                        <span>Kharkiv, Ukraine</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-content">
+                <h1>
+                    Ivan <span class="title-accent">Velykyi</span>
+                </h1>
+                <div class="subtitle">Marketing Manager & Growth Specialist</div>
+                <p class="summary-text">
+                    Results-driven professional with 1+ years in affiliate marketing and media buying, backed by 4 years of software development. Specialized in driving growth through data-driven strategies, partner management, and paid acquisition in iGaming and crypto verticals.
+                </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">01</span>
+                <h2>Expertise</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>Marketing & Growth</h3>
+                    <ul>
+                        <li>Affiliate Marketing</li>
+                        <li>Media Buying (Facebook Ads)</li>
+                        <li>Lead Generation</li>
+                        <li>Performance Marketing</li>
+                        <li>Traffic Analysis</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>Technical Skills</h3>
+                    <ul>
+                        <li>AI Tools (ChatGPT, Claude)</li>
+                        <li>Google Sheets & Analytics</li>
+                        <li>Node.js, .NET</li>
+                        <li>HTML/CSS, Databases</li>
+                        <li>API Integration</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>Leadership</h3>
+                    <ul>
+                        <li>International Negotiations</li>
+                        <li>Team Management</li>
+                        <li>Strategic Planning</li>
+                        <li>Data-Driven Decisions</li>
+                        <li>Partner Relations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">02</span>
+                <h2>Experience</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="timeline">
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="job-title">Marketing Manager</div>
+                        <div class="company">WhyKingz — International iGaming Brands</div>
+                        <div class="duration">Nov 2024 – Sep 2025</div>
+                    </div>
+                    <ul>
+                        <li>Identified and onboarded traffic partners across international markets</li>
+                        <li>Managed paid acquisition campaigns via Facebook Ads with budget optimization</li>
+                        <li>Developed high-converting ad creatives with Design and Product teams</li>
+                        <li>Monitored KPIs and prepared monthly performance analytics</li>
+                    </ul>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="job-title">Affiliate Manager</div>
+                        <div class="company">CMaffs — Crypto Affiliate Network</div>
+                        <div class="duration">Oct 2023 – Oct 2024</div>
+                    </div>
+                    <ul>
+                        <li>Led lead generation and international partnership negotiations</li>
+                        <li>Optimized traffic sources through data-driven performance analysis</li>
+                        <li>Launched separate project with partners in new verticals</li>
+                        <li>Managed CPA/CPL models with international and Ukrainian partners</li>
+                    </ul>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="job-title">Project Manager</div>
+                        <div class="company">IntellDetect — Sports Analytics Solutions</div>
+                        <div class="duration">May 2023 – Oct 2023</div>
+                    </div>
+                    <ul>
+                        <li>Coordinated hockey statistics gathering and analysis project</li>
+                        <li>Managed multidisciplinary team for accurate data collection</li>
+                    </ul>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="job-title">Middle Software Engineer</div>
+                        <div class="company">GlobalLogic — Medical Enterprise Systems</div>
+                        <div class="duration">2019 – 2023</div>
+                    </div>
+                    <ul>
+                        <li>Developed medical enterprise system for pre-production drug testing</li>
+                        <li>Built client-server and web applications using .NET Core and Angular</li>
+                        <li>Applied Agile/Scrum methodology in project execution</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">03</span>
+                <h2>Education & Languages</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="education-grid">
+                <div class="education-card">
+                    <h3>Bachelor of Science</h3>
+                    <div class="institution">System Programming</div>
+                    <div class="institution">Kharkiv Aerospace University "KhAI"</div>
+                    <div class="year">2016 – 2020</div>
+                </div>
+                <div class="education-card">
+                    <div class="languages">
+                        <div class="language-item">
+                            <div class="lang-name">English</div>
+                            <div class="lang-level">Advanced</div>
+                        </div>
+                        <div class="language-item">
+                            <div class="lang-name">Ukrainian</div>
+                            <div class="lang-level">Native</div>
+                        </div>
+                        <div class="language-item">
+                            <div class="lang-name">Russian</div>
+                            <div class="lang-level">Native</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            © 2025 Ivan Velykyi
+        </footer>
+    </div>
+
+    <script>
+        // Spotlight effect following cursor
+        const spotlight = document.getElementById('spotlight');
+        
+        document.addEventListener('mousemove', (e) => {
+            spotlight.style.transform = `translate(${e.clientX - 300}px, ${e.clientY - 300}px)`;
+        });
+    </script>
+</body>
+</html>
